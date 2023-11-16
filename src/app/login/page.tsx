@@ -4,14 +4,16 @@ import {useEffect} from "react";
 import {redirect} from "next/navigation";
 import {Button} from "../../components";
 import {useOauthContext} from "../../services/lichess/OAuthProvider";
+import {activeUserSlice, selectActiveUserLichessAccessToken, useSelector} from "../../redux";
 
 export default function Login() {
     const {oauthService} = useOauthContext()
+    const accessToken = useSelector(selectActiveUserLichessAccessToken)
     useEffect(() => {
-        if(oauthService.isAuthorized()) {
+        if(accessToken) {
             redirect('./home')
         }
-    }, [oauthService, oauthService.accessToken])
+    }, [accessToken])
     return (
         <div>
             <div>

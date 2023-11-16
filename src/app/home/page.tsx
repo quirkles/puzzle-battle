@@ -1,21 +1,47 @@
 'use client'
 
-import {useEffect, useState} from "react";
+import {EventHandler, MouseEvent, SyntheticEvent, useEffect, useState} from "react";
 import {redirect} from "next/navigation";
 import {useOauthContext} from "../../services/lichess/OAuthProvider";
-import {fetchLichessAccountInfo, selectActiveUserLichessId, useDispatch, useSelector} from "../../redux";
+import {
+    activeUserSlice,
+    fetchLichessAccountInfo,
+    selectActiveUserLichessData,
+    useDispatch,
+    useSelector
+} from "../../redux";
+import {Button, Header} from "../../components";
 
 
 export default function Home() {
     const {oauthService} = useOauthContext()
-    const lichessId = useSelector(selectActiveUserLichessId)
+    const {username, userId, accessToken, puzzleRating} = useSelector(selectActiveUserLichessData)
     const dispatch = useDispatch()
+    const logout = () => {
+        oauthService.logout()
+        dispatch(activeUserSlice.actions.logoutLichessUser())
+    }
     useEffect(() => {
-        if(oauthService.accessToken) {
-            dispatch(fetchLichessAccountInfo(oauthService.accessToken))
+        if(accessToken) {
+            dispatch(fetchLichessAccountInfo(accessToken))
         } else {
             redirect('./login')
         }
-    }, [oauthService.accessToken])
-    return (lichessId ? <div>Welcome: {lichessId}</div> : <div>Loading</div>)
+    }, [accessToken])
+    return ((userId && username) ? <HomeLoggedIn lichessUsername={username} logout={logout}/>  : <div>Loading</div>)
+}
+
+interface HomeLoggedInProps{
+    lichessUsername: string,
+    logout: EventHandler<MouseEvent<HTMLButtonElement>>
+}
+function HomeLoggedIn(props: HomeLoggedInProps) {
+    return(
+        <>
+            <Header>
+                <span>Hello {props.lichessUsername}</span>
+                <Button text="Logout" onClick={props.logout}></Button>
+            </Header>
+        </>
+    )
 }

@@ -2,30 +2,15 @@
 
 import {activeUserSlice, selectActiveUserLichessId, useDispatch, useSelector} from "../../redux";
 import {Button} from "../Button";
+import {PropsWithChildren} from "react";
 
-interface HeaderProps {
+interface HeaderProps extends PropsWithChildren{
 }
 
 export function Header(props: HeaderProps) {
-    const lichessId = useSelector(selectActiveUserLichessId)
-    const dispatch = useDispatch()
-    function handleLogin(){
-        dispatch(activeUserSlice.actions.setLichessId('test'))
-    }
     return (
-        <>
-            {lichessId ?
-                <h4>Hello {lichessId}</h4> :
-                <div>
-                    <span>
-                        Please login with lichess
-                    </span>
-                    <Button
-                        text="Login"
-                        onClick={handleLogin}
-                    />
-                </div>
-            }
-        </>
+        <header>
+            {props.children}
+        </header>
     )
 }

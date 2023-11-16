@@ -16,7 +16,7 @@ export const fetchLichessAccountInfo = createAppAsyncThunk(
     async (apiToken: string): Promise<{
         lichessId: string;
         lichessUsername: string;
-        lichessPuzzleRating: string;
+        lichessPuzzleRating: number | null;
     }> => {
         const response = await axios.get(`https://lichess.org/api/account`, {
             headers: {
@@ -27,7 +27,7 @@ export const fetchLichessAccountInfo = createAppAsyncThunk(
         return {
             lichessId: response.data.id,
             lichessUsername: response.data.username,
-            lichessPuzzleRating: response.data.perfs?.puzzle?.rating || null,
+            lichessPuzzleRating: Number(response.data.perfs?.puzzle?.rating) || null,
         }
     }
 )
@@ -43,7 +43,3 @@ export const randomlyAssignUsernameIfEmpty =
                 dispatch(activeUserSlice.actions.setLichessUsername(v4()))
             }
         }
-
-async function asyncProcess(name: string): Promise<boolean> {
-    return new Promise(res => setTimeout(() => res(true), 500))
-}

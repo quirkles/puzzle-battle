@@ -3,9 +3,14 @@
 import {v4} from 'uuid'
 import axios from 'axios'
 
+const LOCAL_STORAGE_KEYS = {
+    code_verifier: 'code_verifier',
+    access_token_value: 'access_token_value',
+    access_expires_at: 'access_expires_at',
+    lichess_oauth_state: 'lichess_oauth_state',
+} as const
 
 export class OauthService {
-    private scopes: string[] = [];
     private clientId = 'puzzle-battle';
     private clientUrl = global["location"] ? `${location.protocol}//${location.host}/oauthRedirect` : "";
     private lichessHost = 'https://lichess.org';
@@ -20,22 +25,22 @@ export class OauthService {
             return
         }
 
-        let code_verifier = localStorage.getItem('code_verifier')
+        let code_verifier = localStorage.getItem(LOCAL_STORAGE_KEYS.code_verifier)
         if (!code_verifier) {
             code_verifier = `${v4()}${v4()}`
-            localStorage.setItem('code_verifier', code_verifier)
+            localStorage.setItem(LOCAL_STORAGE_KEYS.code_verifier, code_verifier)
         }
         this.code_verifier = code_verifier
 
-        let state = localStorage.getItem('state')
+        let state = localStorage.getItem(LOCAL_STORAGE_KEYS.lichess_oauth_state)
         if (!state) {
             state = v4()
-            localStorage.setItem('state', state)
+            localStorage.setItem(LOCAL_STORAGE_KEYS.lichess_oauth_state, state)
         }
         this.state = state
 
-        let access_token_value = localStorage.getItem('access_token_value')
-        let access_expires_at = localStorage.getItem('access_expires_at')
+        let access_token_value = localStorage.getItem(LOCAL_STORAGE_KEYS.access_token_value)
+        let access_expires_at = localStorage.getItem(LOCAL_STORAGE_KEYS.access_expires_at)
 
         if (access_token_value && access_expires_at) {
             if (Number(access_expires_at) > (Date.now() + 60000)) {
@@ -80,7 +85,7 @@ export class OauthService {
     }
 
 
-    getAccessToken(code: string): Promise<void> {
+    getAccessToken(code: string): Promise<string> {
         const params = new URLSearchParams();
         params.append('grant_type', 'authorization_code')
         params.append('code', code)
@@ -95,12 +100,19 @@ export class OauthService {
             } = resp.data
 
             const expiresAt = Date.now() + expires_in
-            localStorage.setItem('access_token_value', access_token)
-            localStorage.setItem('access_expires_at', expiresAt)
+            localStorage.setItem(LOCAL_STORAGE_KEYS.access_token_value, access_token)
+            localStorage.setItem(LOCAL_STORAGE_KEYS.access_expires_at, expiresAt)
             this.token = {
                 value: access_token,
                 expiresAt,
             }
+            return access_token
         })
+    }
+
+    logout(){
+        for(const key in LOCAL_STORAGE_KEYS) {
+            window.localStorage.removeItem(key)
+        }
     }
 }

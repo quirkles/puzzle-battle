@@ -6,4 +6,8 @@
 
 import {ReduxState} from "../../store";
 
-export const selectActiveUserLichessId = (state: ReduxState): string | null => state.activeUserSlice.lichessUserId
+export const selectActiveUserLichessId = (state: ReduxState) => state.activeUserSlice.lichess.userId
+export const selectActiveUserLichessUsername = (state: ReduxState) => state.activeUserSlice.lichess.username
+export const selectActiveUserLichessRating = (state: ReduxState) => state.activeUserSlice.lichess.puzzleRating
+export const selectActiveUserLichessAccessToken = (state: ReduxState) => state.activeUserSlice.lichess.accessToken
+export const selectActiveUserLichessData = (state: ReduxState) => state.activeUserSlice.lichess

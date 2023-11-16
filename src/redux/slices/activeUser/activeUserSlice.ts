@@ -7,8 +7,12 @@ import {fetchLichessAccountInfo} from './thunks'
 
 const initialState: ActiveUserSlice = {
     id: v4(),
-    lichessUserId: null,
-    lichessUsername: null,
+    lichess: {
+        userId: null,
+        username: null,
+        puzzleRating: null,
+        accessToken: null
+    }
 }
 
 export const activeUserSlice = createSlice({
@@ -16,11 +20,22 @@ export const activeUserSlice = createSlice({
     initialState,
     // The `reducers` field lets us define reducers and generate associated actions
     reducers: {
+        logoutLichessUser:(state, action: PayloadAction<void>) => {
+            state.lichess = {
+                userId: null,
+                username: null,
+                puzzleRating: null,
+                accessToken: null,
+            }
+        },
+        setLichessAccessToken: (state, action: PayloadAction<string | null>) => {
+            state.lichess.accessToken = action.payload
+        },
         setLichessUsername: (state, action: PayloadAction<string>) => {
-            state.lichessUsername = action.payload
+            state.lichess.username = action.payload
         },
         setLichessId: (state, action: PayloadAction<string>) => {
-            state.lichessUserId = action.payload
+            state.lichess.userId = action.payload
         },
     },
     // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -28,8 +43,9 @@ export const activeUserSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchLichessAccountInfo.fulfilled, (state, action) => {
-                state.lichessUsername = action.payload.lichessUsername
-                state.lichessUserId = action.payload.lichessId
+                state.lichess.username = action.payload.lichessUsername
+                state.lichess.userId = action.payload.lichessId
+                state.lichess.puzzleRating = action.payload.lichessPuzzleRating
             })
     },
 })
@@ -37,6 +53,10 @@ export const activeUserSlice = createSlice({
 /* Types */
 export interface ActiveUserSlice {
     id: string
-    lichessUserId: string | null
-    lichessUsername: string | null
+    lichess: {
+        userId: string | null
+        username: string | null
+        puzzleRating: number | null
+        accessToken: string | null
+    }
 }
