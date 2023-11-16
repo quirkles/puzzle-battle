@@ -1,10 +1,16 @@
-import {Header} from "../Components";
+'use client'
+
+import {useEffect} from "react";
+import {redirect} from "next/navigation";
+import {useOauthContext} from "../services/lichess/OAuthProvider";
 
 export default function Home() {
-    return (<main className="grid grid-cols-6">
-                <div className="col-span-6">
-                    <Header></Header>
-                </div>
-            </main>
-    )
+    const {oauthService} = useOauthContext()
+    useEffect(() => {
+        if(oauthService.isAuthorized()) {
+            redirect('./home')
+        } else {
+            redirect('./login')
+        }
+    })
 }

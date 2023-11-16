@@ -1,7 +1,8 @@
 import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 import './globals.css'
-import {Providers} from "../redux/Provider";
+import {ReduxProviders} from "../redux/Provider";
+import {OAuthProvider} from "../services/lichess/OAuthProvider";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -16,10 +17,12 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <Providers>
+        <OAuthProvider>
+        <ReduxProviders>
             <html lang="en">
             <body className={inter.className}>{children}</body>
             </html>
-        </Providers>
+        </ReduxProviders>
+        </OAuthProvider>
     )
 }
