@@ -28,7 +28,7 @@ export const randomlyAssignUsernameIfEmpty =
             const currentValue = selectActiveUserLichessId(getState())
 
             if (currentValue === null) {
-                dispatch(activeUserSlice.actions.setUsername(v4()))
+                dispatch(activeUserSlice.actions.setLichessUsername(v4()))
             }
         }
 

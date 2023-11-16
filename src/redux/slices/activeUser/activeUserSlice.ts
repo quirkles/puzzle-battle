@@ -16,8 +16,11 @@ export const activeUserSlice = createSlice({
     initialState,
     // The `reducers` field lets us define reducers and generate associated actions
     reducers: {
-        setUsername: (state, action: PayloadAction<string>) => {
+        setLichessUsername: (state, action: PayloadAction<string>) => {
             state.lichessUsername = action.payload
+        },
+        setLichessId: (state, action: PayloadAction<string>) => {
+            state.lichessUserId = action.payload
         },
     },
     // The `extraReducers` field lets the slice handle actions defined elsewhere,
