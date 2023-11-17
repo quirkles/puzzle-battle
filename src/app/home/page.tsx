@@ -11,24 +11,28 @@ import {
     useSelector
 } from "../../redux";
 import {Button, Header} from "../../components";
+import {useOauthService} from "../hooks/useOauth";
 
 
 export default function Home() {
     const {oauthService} = useOauthContext()
-    const {username, userId, accessToken, puzzleRating} = useSelector(selectActiveUserLichessData)
+    const {accessToken, logout} = useOauthService(oauthService)
+    const {username, userId, puzzleRating} = useSelector(selectActiveUserLichessData)
     const dispatch = useDispatch()
-    const logout = () => {
-        oauthService.logout()
+    const doLogout = () => {
+        logout()
         dispatch(activeUserSlice.actions.logoutLichessUser())
     }
     useEffect(() => {
         if(accessToken) {
-            dispatch(fetchLichessAccountInfo(accessToken))
+            if(!(username && userId)) {
+                dispatch(fetchLichessAccountInfo(accessToken.value))
+            }
         } else {
             redirect('./login')
         }
-    }, [accessToken])
-    return ((userId && username) ? <HomeLoggedIn lichessUsername={username} logout={logout}/>  : <div>Loading</div>)
+    }, [accessToken, userId, username])
+    return ((userId && username) ? <HomeLoggedIn lichessUsername={username} logout={doLogout}/>  : <div>Loading</div>)
 }
 
 interface HomeLoggedInProps{

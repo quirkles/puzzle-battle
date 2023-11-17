@@ -10,7 +10,9 @@ const LOCAL_STORAGE_KEYS = {
     lichess_oauth_state: 'lichess_oauth_state',
 } as const
 
-export class OauthService {
+export interface AccessToken { value: string, expiresAt: number };
+
+export class OAuthService {
     private clientId = 'puzzle-battle';
     private clientUrl = global["location"] ? `${location.protocol}//${location.host}/oauthRedirect` : "";
     private lichessHost = 'https://lichess.org';
@@ -18,7 +20,7 @@ export class OauthService {
     private readonly code_verifier: string = ''
     private readonly state: string = ''
 
-    private token: { value: string, expiresAt: number } | null = null;
+    private accessToken: AccessToken | null = null;
 
     constructor() {
         if (!global['localStorage']) {
@@ -44,7 +46,7 @@ export class OauthService {
 
         if (access_token_value && access_expires_at) {
             if (Number(access_expires_at) > (Date.now() + 60000)) {
-                this.token = {
+                this.accessToken = {
                     value: access_token_value,
                     expiresAt: Number(access_expires_at)
                 }
@@ -55,11 +57,22 @@ export class OauthService {
 
 
     isAuthorized(): boolean {
-        return (this.token && this.token.value && (this.token.expiresAt > (Date.now() + 60000))) || false
+        return (this.accessToken && this.accessToken.value && (this.accessToken.expiresAt > (Date.now() + 60000))) || false
     }
 
-    get accessToken(): string | null {
-        return (this.token && this.token.value && (this.token.expiresAt > (Date.now() + 60000))) && this.token.value || null
+    getAccessToken(): AccessToken | null {
+        if (this.accessToken && this.accessToken.value && (this.accessToken.expiresAt > (Date.now() + 60000))) {
+            return this.accessToken
+        }
+        if(global['localStorage']) {
+            localStorage.removeItem(LOCAL_STORAGE_KEYS.access_token_value)
+            localStorage.removeItem(LOCAL_STORAGE_KEYS.access_expires_at)
+        }
+        return null
+    }
+
+    setAccessToken(accessToken: AccessToken) {
+        this.accessToken = accessToken
     }
 
     verifyState(state: string): boolean {
@@ -85,7 +98,7 @@ export class OauthService {
     }
 
 
-    getAccessToken(code: string): Promise<string> {
+    async fetchAccessToken(code: string): Promise<AccessToken> {
         const params = new URLSearchParams();
         params.append('grant_type', 'authorization_code')
         params.append('code', code)
@@ -93,26 +106,30 @@ export class OauthService {
         params.append('redirect_uri', this.clientUrl)
         params.append('client_id', this.clientId)
 
-        return axios.post(`${this.lichessHost}/api/token`, params).then(resp => {
-            const {
-                access_token,
-                expires_in
-            } = resp.data
-
-            const expiresAt = Date.now() + expires_in
-            localStorage.setItem(LOCAL_STORAGE_KEYS.access_token_value, access_token)
-            localStorage.setItem(LOCAL_STORAGE_KEYS.access_expires_at, expiresAt)
-            this.token = {
-                value: access_token,
-                expiresAt,
-            }
-            return access_token
-        })
+        let resp = await axios.post(`${this.lichessHost}/api/token`, params);
+        const {
+            access_token,
+            expires_in
+        } = resp.data
+        const expiresAt = Date.now() + expires_in
+        localStorage.setItem(LOCAL_STORAGE_KEYS.access_token_value, access_token)
+        localStorage.setItem(LOCAL_STORAGE_KEYS.access_expires_at, expiresAt)
+        this.accessToken = {
+            value: access_token,
+            expiresAt,
+        }
+        return {
+            value: access_token,
+            expiresAt: expiresAt
+        }
     }
 
     logout(){
-        for(const key in LOCAL_STORAGE_KEYS) {
-            window.localStorage.removeItem(key)
+        this.accessToken = null
+        if(global['localStorage']) {
+            for(const key in LOCAL_STORAGE_KEYS) {
+                localStorage.removeItem(key)
+            }
         }
     }
 }

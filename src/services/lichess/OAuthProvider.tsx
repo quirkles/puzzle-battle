@@ -1,8 +1,8 @@
 'use client'
 import {createContext, useContext, ReactNode} from "react";
-import {OauthService} from "./OAuthService";
+import {OAuthService} from "./OAuthService";
 interface OauthContext {
-    oauthService: OauthService,
+    oauthService: OAuthService,
 }
 
 const OauthContext = createContext({} as OauthContext);
@@ -10,7 +10,7 @@ const OauthContext = createContext({} as OauthContext);
 
 export function OAuthProvider({ children }: {children: ReactNode}) {
 
-    const oauthService = new OauthService()
+    const oauthService = new OAuthService()
 
     return (
         <OauthContext.Provider value={{ oauthService }}>{children}</OauthContext.Provider>
