@@ -1,10 +1,15 @@
 import type {Metadata} from 'next'
-import {Inter} from 'next/font/google'
+import {Lato} from 'next/font/google'
 import './globals.css'
 import {ReduxProviders} from "../redux/Provider";
 import {OAuthProvider} from "../services/lichess/OAuthProvider";
 
-const inter = Inter({subsets: ['latin']})
+const lato = Lato({
+    weight: ['400', '700'],
+    style: ['normal', 'italic'],
+    subsets: ['latin'],
+    display: 'swap',
+})
 
 export const metadata: Metadata = {
     title: 'Create Next App',
@@ -19,8 +24,8 @@ export default function RootLayout({
     return (
         <OAuthProvider>
         <ReduxProviders>
-            <html lang="en">
-            <body className={inter.className}>{children}</body>
+            <html lang="en" className={lato.className}>
+            <body>{children}</body>
             </html>
         </ReduxProviders>
         </OAuthProvider>
