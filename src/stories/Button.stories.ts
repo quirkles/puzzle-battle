@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import {Button} from "../components";
 import '../app/globals.css'
+import {Colors} from "../colors";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
@@ -15,6 +16,7 @@ const meta = {
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     text: { control: 'text' },
+    color: { control: 'select' },
   },
 } satisfies Meta<typeof Button>;
 
@@ -24,6 +26,7 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {
   args: {
-    text: 'Primary Button'
+    text: 'Primary Button',
+    color: Colors.BLUE
   },
 };

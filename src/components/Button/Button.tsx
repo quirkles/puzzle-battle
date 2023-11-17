@@ -1,20 +1,25 @@
-import {EventHandler, MouseEvent} from "react";
+import {EventHandler, MouseEvent, useEffect, useState} from "react";
+import {getButtonClassName} from "./className";
+import {Color} from "../../colors";
 
 interface ButtonProps {
     text: string;
+    color: Color;
     onClick: EventHandler<MouseEvent<HTMLButtonElement>>
 }
 
-const tailwindClass = "transition-all uppercase text-white relative px-8 py-2 rounded-md bg-blue-100 isolation-auto z-10 border-2 border-blue before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-blue-400 before:-z-10 before:aspect-square before:hover:scale-150 overflow-hidden before:hover:duration-700"
-
 export function Button(props: ButtonProps) {
-    const {text, onClick} = props
+    const {text, onClick, color} = props
+    const [className, setClassName] = useState(getButtonClassName(color))
+    useEffect(() => {
+        setClassName(getButtonClassName(color))
+    }, [color]);
     function handleClick(e:MouseEvent<HTMLButtonElement>) {
         e.preventDefault()
         e.stopPropagation()
         onClick(e)
     }
     return (
-        <button className={tailwindClass} onClick={handleClick}>{text}</button>
+        <button className={className} onClick={handleClick}>{text}</button>
     )
 }

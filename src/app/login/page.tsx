@@ -6,6 +6,7 @@ import {Button} from "../../components";
 import {useOauthContext} from "../../services/lichess/OAuthProvider";
 import {activeUserSlice, selectActiveUserLichessAccessToken, useSelector} from "../../redux";
 import {useOauthService} from "../hooks/useOauth";
+import {Colors} from "../../colors";
 
 export default function Login() {
     const {oauthService} = useOauthContext()
@@ -19,6 +20,7 @@ export default function Login() {
         <div>
             <div>
                 <Button
+                    color={Colors.BLUE}
                     text="Login"
                     onClick={oauthService.beginAuthFlow.bind(oauthService)}
                 />
