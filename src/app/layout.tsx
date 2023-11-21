@@ -3,6 +3,8 @@ import {Lato} from 'next/font/google'
 import './globals.css'
 import {ReduxProviders} from "../redux/Provider";
 import {OAuthProvider, EventsProvider} from "../services";
+import {ApolloProvider} from "@apollo/client";
+import {apolloClient} from "../services/graphql";
 
 const lato = Lato({
     weight: ['400', '700'],
@@ -22,6 +24,7 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
+        <ApolloProvider client={apolloClient}>
         <EventsProvider>
         <OAuthProvider>
         <ReduxProviders>
@@ -31,5 +34,6 @@ export default function RootLayout({
         </ReduxProviders>
         </OAuthProvider>
         </EventsProvider>
+        </ApolloProvider>
     )
 }

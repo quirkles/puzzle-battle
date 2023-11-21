@@ -23,7 +23,6 @@ export const fetchLichessAccountInfo = createAppAsyncThunk(
                 Authorization: `Bearer ${apiToken}`
             }
         })
-        console.log(response.data)
         return {
             lichessId: response.data.id,
             lichessUsername: response.data.username,

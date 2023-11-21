@@ -1,15 +1,14 @@
 'use client'
-import {io, Socket} from "socket.io-client";
 import {createContext, PropsWithChildren, useContext, useReducer} from 'react';
+import {EventSocketService} from "./EventSocketService";
 
-const EventsContext = createContext<Socket | null>(null);
+const eventSocketService = new EventSocketService()
 
-const socket = io('http://localhost:3030');
-
+const EventsContext = createContext<EventSocketService>(eventSocketService);
 
 export function EventsProvider({children}: PropsWithChildren) {
     return (
-        <EventsContext.Provider value={socket}>
+        <EventsContext.Provider value={eventSocketService}>
             {children}
         </EventsContext.Provider>
     );

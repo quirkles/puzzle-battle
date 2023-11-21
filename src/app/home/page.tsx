@@ -2,7 +2,7 @@
 
 import {EventHandler, MouseEvent, SyntheticEvent, useEffect, useState} from "react";
 import {redirect} from "next/navigation";
-import {useOauthContext} from "../../services/lichess/OAuthProvider";
+import {useOauthContext} from "../../services";
 import {
     activeUserSlice,
     fetchLichessAccountInfo,
@@ -11,7 +11,7 @@ import {
     useSelector
 } from "../../redux";
 import {Button, Header} from "../../components";
-import {useOauthService} from "../hooks/useOauth";
+import {useOauthService} from "../hooks";
 
 
 export default function Home() {
@@ -32,19 +32,22 @@ export default function Home() {
             redirect('./login')
         }
     }, [accessToken, userId, username])
-    return ((userId && username) ? <HomeLoggedIn lichessUsername={username} logout={doLogout}/>  : <div>Loading</div>)
+    return ((userId && username) ? <HomeLoggedIn logout={doLogout}/>  : <div>Loading</div>)
 }
 
 interface HomeLoggedInProps{
-    lichessUsername: string,
     logout: EventHandler<MouseEvent<HTMLButtonElement>>
 }
 function HomeLoggedIn(props: HomeLoggedInProps) {
+    const {username, userId, puzzleRating} = useSelector(selectActiveUserLichessData)
+    useEffect(() => {
+
+    }, [username, userId, puzzleRating]);
     return(
         <>
             <Header>
-                <span>Hello {props.lichessUsername}</span>
-                <Button text="Logout" onClick={props.logout}></Button>
+                <span>Hello {username}</span>
+                <Button text="Logout" onClick={props.logout} color={'red'}></Button>
             </Header>
         </>
     )

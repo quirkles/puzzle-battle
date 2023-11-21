@@ -6,7 +6,7 @@ import {redirect} from "next/navigation";
 import "./login.scss"
 
 import {Button} from "../../components";
-import {useOauthContext, useEvents} from "../../services";
+import {useOauthContext} from "../../services";
 import {useOauthService} from "../hooks/useOauth";
 import {Colors} from "../../colors";
 
@@ -18,18 +18,6 @@ export default function Login() {
             redirect('./home')
         }
     }, [accessToken])
-
-    const eventSocket = useEvents()
-    useEffect(() => {
-        if(eventSocket) {
-            eventSocket.connect().emit('identity', 4)
-        }
-        return () => {
-            if(eventSocket) {
-                eventSocket.disconnect()
-            }
-        }
-    }, [eventSocket]);
     return (
         <div id="login-page" className="grid grid-cols-3 grid-rows-1 auto-rows-max auto-cols-max">
             <div className="col-start-2 justify-self-stretch justify-center items-center self-center col-span-1 flex flex-col">

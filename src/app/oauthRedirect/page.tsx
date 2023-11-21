@@ -1,12 +1,12 @@
 'use client'
 import {useEffect} from "react";
 import {useSearchParams, redirect, useRouter} from "next/navigation";
-import {useOauthContext} from "../../services/lichess/OAuthProvider";
+import {useOauthContext} from "../../services";
 import {
     activeUserSlice,
     useDispatch,
 } from "../../redux";
-import {useOauthService} from "../hooks/useOauth";
+import {useOauthService} from "../hooks";
 
 export default function OauthRedirect() {
     const { oauthService } = useOauthContext()
