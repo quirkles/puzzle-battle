@@ -41,7 +41,7 @@ interface HomeLoggedInProps{
 function HomeLoggedIn(props: HomeLoggedInProps) {
     const {username, userId, puzzleRating} = useSelector(selectActiveUserLichessData)
     useEffect(() => {
-
+        // call the login user mutation here and dispatch a redux event so that the user id is set in the active user slice
     }, [username, userId, puzzleRating]);
     return(
         <>
