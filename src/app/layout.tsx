@@ -2,7 +2,7 @@ import type {Metadata} from 'next'
 import {Lato} from 'next/font/google'
 import './globals.css'
 import {ReduxProviders} from "../redux/Provider";
-import {OAuthProvider} from "../services/lichess/OAuthProvider";
+import {OAuthProvider, EventsProvider} from "../services";
 
 const lato = Lato({
     weight: ['400', '700'],
@@ -22,6 +22,7 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
+        <EventsProvider>
         <OAuthProvider>
         <ReduxProviders>
             <html lang="en" className={lato.className}>
@@ -29,5 +30,6 @@ export default function RootLayout({
             </html>
         </ReduxProviders>
         </OAuthProvider>
+        </EventsProvider>
     )
 }

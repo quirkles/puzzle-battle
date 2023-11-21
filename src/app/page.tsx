@@ -2,7 +2,7 @@
 
 import {useEffect} from "react";
 import {redirect} from "next/navigation";
-import {useOauthContext} from "../services/lichess/OAuthProvider";
+import {useOauthContext} from "../services";
 
 export default function Home() {
     const {oauthService} = useOauthContext()

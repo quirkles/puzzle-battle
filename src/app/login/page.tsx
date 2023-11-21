@@ -8,6 +8,7 @@ import {Button} from "../../components";
 import {useOauthContext} from "../../services/lichess/OAuthProvider";
 import {useOauthService} from "../hooks/useOauth";
 import {Colors} from "../../colors";
+import {useEvents} from "../../services";
 
 export default function Login() {
     const {oauthService} = useOauthContext()
@@ -17,6 +18,18 @@ export default function Login() {
             redirect('./home')
         }
     }, [accessToken])
+
+    const eventSocket = useEvents()
+    useEffect(() => {
+        if(eventSocket) {
+            eventSocket.connect().emit('identity', 4)
+        }
+        return () => {
+            if(eventSocket) {
+                eventSocket.disconnect()
+            }
+        }
+    }, [eventSocket]);
     return (
         <div id="login-page" className="grid grid-cols-3 grid-rows-1 auto-rows-max auto-cols-max">
             <div className="col-start-2 justify-self-stretch justify-center items-center self-center col-span-1 flex flex-col">
