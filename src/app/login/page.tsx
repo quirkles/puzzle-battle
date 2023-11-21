@@ -4,11 +4,11 @@ import {useEffect} from "react";
 import {redirect} from "next/navigation";
 
 import "./login.scss"
+
 import {Button} from "../../components";
-import {useOauthContext} from "../../services/lichess/OAuthProvider";
+import {useOauthContext, useEvents} from "../../services";
 import {useOauthService} from "../hooks/useOauth";
 import {Colors} from "../../colors";
-import {useEvents} from "../../services";
 
 export default function Login() {
     const {oauthService} = useOauthContext()
