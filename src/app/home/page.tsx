@@ -1,7 +1,9 @@
 'use client'
+import {EventHandler, MouseEvent, useEffect} from "react";
+import {ApolloProvider, useMutation} from "@apollo/client";
 
-import {EventHandler, MouseEvent, SyntheticEvent, useEffect, useState} from "react";
 import {redirect} from "next/navigation";
+
 import {useOauthContext} from "../../services";
 import {
     activeUserSlice,
@@ -12,6 +14,8 @@ import {
 } from "../../redux";
 import {Button, Header} from "../../components";
 import {useOauthService} from "../hooks";
+import {LOGIN_USER} from "../../services/graphql/mutations/loginUser";
+import {apolloClient} from "../../services/graphql";
 
 
 export default function Home() {
@@ -32,7 +36,11 @@ export default function Home() {
             redirect('./login')
         }
     }, [accessToken, userId, username])
-    return ((userId && username) ? <HomeLoggedIn logout={doLogout}/>  : <div>Loading</div>)
+            return (
+            <ApolloProvider client={apolloClient}>
+                {(userId && username) ? <HomeLoggedIn logout={doLogout}/>  : <div>Loading</div>}
+            </ApolloProvider>
+        )
 }
 
 interface HomeLoggedInProps{
@@ -40,8 +48,20 @@ interface HomeLoggedInProps{
 }
 function HomeLoggedIn(props: HomeLoggedInProps) {
     const {username, userId, puzzleRating} = useSelector(selectActiveUserLichessData)
+    const [loginUser, { data, loading, error }] = useMutation(LOGIN_USER)
     useEffect(() => {
-        // call the login user mutation here and dispatch a redux event so that the user id is set in the active user slice
+        if(username && userId && puzzleRating) {
+            console.log("Here")
+        loginUser({
+            variables: {
+                userData: {
+                "lichessId": userId,
+                "lichessUsername": username,
+                "lichessPuzzleRating": puzzleRating
+                }
+            }
+        })
+        }
     }, [username, userId, puzzleRating]);
     return(
         <>

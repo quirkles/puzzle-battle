@@ -24,7 +24,6 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <ApolloProvider client={apolloClient}>
         <EventsProvider>
         <OAuthProvider>
         <ReduxProviders>
@@ -34,6 +33,5 @@ export default function RootLayout({
         </ReduxProviders>
         </OAuthProvider>
         </EventsProvider>
-        </ApolloProvider>
     )
 }
