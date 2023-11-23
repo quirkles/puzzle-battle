@@ -8,7 +8,6 @@ import { useEvents, useOauthContext } from '../../services';
 import {
   activeUserSlice,
   fetchLichessAccountInfo,
-  selectActiveUserId,
   selectActiveUserLichessData,
   useDispatch,
   useSelector
@@ -53,8 +52,9 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
     puzzleRating
   } = useSelector(selectActiveUserLichessData);
   const eventSocketService = useEvents();
-  const userId = useSelector(selectActiveUserId);
-  const [loginUser] = useMutation(LOGIN_USER);
+  const dispatch = useDispatch();
+
+  const [loginUser, { data }] = useMutation(LOGIN_USER);
   useEffect(() => {
     if (username && lichessUserId && puzzleRating) {
       loginUser({
@@ -69,11 +69,12 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
     }
   }, [username, lichessUserId, puzzleRating, loginUser]);
   useEffect(() => {
-    if (userId) {
-      eventSocketService.notifyLogin(userId);
+    if (data?.loginUser.id) {
+      dispatch(activeUserSlice.actions.setId(data?.loginUser.id));
+      eventSocketService.notifyLogin(data?.loginUser.id);
       return eventSocketService.on('GameStart', (payload) => redirect(`./game/${payload.gameId}`));
     }
-  }, [userId, eventSocketService]);
+  }, [data, eventSocketService]);
   return (
     <>
       <Header>
