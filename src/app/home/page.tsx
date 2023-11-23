@@ -4,10 +4,11 @@ import {ApolloProvider, useMutation} from "@apollo/client";
 
 import {redirect} from "next/navigation";
 
-import {useOauthContext} from "../../services";
+import {useEvents, useOauthContext} from "../../services";
 import {
     activeUserSlice,
     fetchLichessAccountInfo,
+    selectActiveUserId,
     selectActiveUserLichessData,
     useDispatch,
     useSelector
@@ -47,22 +48,32 @@ interface HomeLoggedInProps{
     logout: EventHandler<MouseEvent<HTMLButtonElement>>
 }
 function HomeLoggedIn(props: HomeLoggedInProps) {
-    const {username, userId, puzzleRating} = useSelector(selectActiveUserLichessData)
+    const {username, userId: lichessUserId, puzzleRating} = useSelector(selectActiveUserLichessData)
+    const eventSocketService = useEvents()
+    const userId = useSelector(selectActiveUserId)
     const [loginUser, { data, loading, error }] = useMutation(LOGIN_USER)
     useEffect(() => {
-        if(username && userId && puzzleRating) {
-            console.log("Here")
+        if(username && lichessUserId && puzzleRating) {
         loginUser({
             variables: {
                 userData: {
-                "lichessId": userId,
+                "lichessId": lichessUserId,
                 "lichessUsername": username,
                 "lichessPuzzleRating": puzzleRating
                 }
             }
         })
         }
-    }, [username, userId, puzzleRating]);
+    }, [username, lichessUserId, puzzleRating]);
+    useEffect(() => {
+        if(userId) {
+            eventSocketService.notifyLogin(userId)
+            return eventSocketService.on(
+                'GameStart',
+                (payload) => redirect(`./game/${payload.gameId}`)
+            )
+        }
+    }, [userId, eventSocketService]);
     return(
         <>
             <Header>
