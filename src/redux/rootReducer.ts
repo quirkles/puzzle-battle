@@ -1,6 +1,6 @@
 /* Instruments */
-import { activeUserSlice } from './slices'
+import { activeUserSlice } from './slices';
 
 export const reducer = {
-    activeUserSlice: activeUserSlice.reducer,
-}
+  activeUserSlice: activeUserSlice.reducer
+};

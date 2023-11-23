@@ -8,10 +8,10 @@ const config: CodegenConfig = {
       preset: 'client',
       plugins: [],
       presetConfig: {
-        gqlTagName: 'gql',
-      },
-    },
-  },
+        gqlTagName: 'gql'
+      }
+    }
+  }
 };
 
 export default config;

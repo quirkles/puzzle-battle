@@ -10,7 +10,7 @@ import {
   fetchLichessAccountInfo,
   selectActiveUserLichessData,
   useDispatch,
-  useSelector,
+  useSelector
 } from '../../redux';
 import { Button, Header } from '../../components';
 import { useOauthService } from '../hooks';
@@ -20,9 +20,8 @@ import { apolloClient } from '../../services/graphql';
 export default function Home() {
   const { oauthService } = useOauthContext();
   const { accessToken, logout } = useOauthService(oauthService);
-  const { username, userId, puzzleRating } = useSelector(
-    selectActiveUserLichessData
-  );
+  const { username, userId, puzzleRating } = useSelector(selectActiveUserLichessData);
+  console.log(puzzleRating);
   const dispatch = useDispatch();
   const doLogout = () => {
     logout();
@@ -39,11 +38,7 @@ export default function Home() {
   }, [accessToken, userId, username]);
   return (
     <ApolloProvider client={apolloClient}>
-      {userId && username ? (
-        <HomeLoggedIn logout={doLogout} />
-      ) : (
-        <div>Loading</div>
-      )}
+      {userId && username ? <HomeLoggedIn logout={doLogout} /> : <div>Loading</div>}
     </ApolloProvider>
   );
 }
@@ -52,10 +47,9 @@ interface HomeLoggedInProps {
   logout: EventHandler<MouseEvent<HTMLButtonElement>>;
 }
 function HomeLoggedIn(props: HomeLoggedInProps) {
-  const { username, userId, puzzleRating } = useSelector(
-    selectActiveUserLichessData
-  );
+  const { username, userId, puzzleRating } = useSelector(selectActiveUserLichessData);
   const [loginUser, { data, loading, error }] = useMutation(LOGIN_USER);
+  console.log(data, loading, error);
   useEffect(() => {
     if (username && userId && puzzleRating) {
       loginUser({
@@ -63,9 +57,9 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
           userData: {
             lichessId: userId,
             lichessUsername: username,
-            lichessPuzzleRating: puzzleRating,
-          },
-        },
+            lichessPuzzleRating: puzzleRating
+          }
+        }
       });
     }
   }, [username, userId, puzzleRating]);
@@ -73,7 +67,7 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
     <>
       <Header>
         <span>Hello {username}</span>
-        <Button text='Logout' onClick={props.logout} color={'red'}></Button>
+        <Button text="Logout" onClick={props.logout} color={'red'}></Button>
       </Header>
     </>
   );
