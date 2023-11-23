@@ -1,2 +1,2 @@
-export * from './lichess'
-export * from './events'
+export * from './lichess';
+export * from './events';

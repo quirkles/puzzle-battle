@@ -1,1 +1,1 @@
-export {EventsProvider, useEvents} from './eventsProvider'
+export { EventsProvider, useEvents } from './eventsProvider';
