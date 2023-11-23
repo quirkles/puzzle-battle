@@ -1,5 +1,5 @@
 /* Instruments */
-import { selectActiveUserLichessId } from './selectors';
+import { selectActiveUserLichessUsername } from './selectors';
 import { v4 } from 'uuid';
 import { createAppAsyncThunk } from '../../createAppAsyncThunk';
 import { ReduxThunkAction } from '../../store';
@@ -36,7 +36,7 @@ export const fetchLichessAccountInfo = createAppAsyncThunk(
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.
 export const randomlyAssignUsernameIfEmpty = (): ReduxThunkAction => (dispatch, getState) => {
-  const currentValue = selectActiveUserLichessId(getState());
+  const currentValue = selectActiveUserLichessUsername(getState());
 
   if (currentValue === null) {
     dispatch(activeUserSlice.actions.setLichessUsername(v4()));

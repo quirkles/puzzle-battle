@@ -46,8 +46,8 @@ export class OAuthService {
     }
     this.state = state;
 
-    let access_token_value = localStorage.getItem(LOCAL_STORAGE_KEYS.access_token_value);
-    let access_expires_at = localStorage.getItem(LOCAL_STORAGE_KEYS.access_expires_at);
+    const access_token_value = localStorage.getItem(LOCAL_STORAGE_KEYS.access_token_value);
+    const access_expires_at = localStorage.getItem(LOCAL_STORAGE_KEYS.access_expires_at);
 
     if (access_token_value && access_expires_at) {
       if (Number(access_expires_at) > Date.now() + 60000) {
@@ -119,7 +119,7 @@ export class OAuthService {
     params.append('redirect_uri', this.clientUrl);
     params.append('client_id', this.clientId);
 
-    let resp = await axios.post(`${this.lichessHost}/api/token`, params);
+    const resp = await axios.post(`${this.lichessHost}/api/token`, params);
     const { access_token, expires_in } = resp.data;
     const expiresAt = Date.now() + expires_in;
     localStorage.setItem(LOCAL_STORAGE_KEYS.access_token_value, access_token);
