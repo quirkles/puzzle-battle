@@ -1,8 +1,8 @@
-'use client'
-import {EventHandler, MouseEvent, useEffect} from "react";
-import {ApolloProvider, useMutation} from "@apollo/client";
+'use client';
+import { EventHandler, MouseEvent, useEffect } from 'react';
+import { ApolloProvider, useMutation } from '@apollo/client';
 
-import {redirect} from "next/navigation";
+import { redirect } from 'next/navigation';
 
 import {useEvents, useOauthContext} from "../../services";
 import {
@@ -20,32 +20,38 @@ import {apolloClient} from "../../services/graphql";
 
 
 export default function Home() {
-    const {oauthService} = useOauthContext()
-    const {accessToken, logout} = useOauthService(oauthService)
-    const {username, userId, puzzleRating} = useSelector(selectActiveUserLichessData)
-    const dispatch = useDispatch()
-    const doLogout = () => {
-        logout()
-        dispatch(activeUserSlice.actions.logoutLichessUser())
+  const { oauthService } = useOauthContext();
+  const { accessToken, logout } = useOauthService(oauthService);
+  const { username, userId, puzzleRating } = useSelector(
+    selectActiveUserLichessData
+  );
+  const dispatch = useDispatch();
+  const doLogout = () => {
+    logout();
+    dispatch(activeUserSlice.actions.logoutLichessUser());
+  };
+  useEffect(() => {
+    if (accessToken) {
+      if (!(username && userId)) {
+        dispatch(fetchLichessAccountInfo(accessToken.value));
+      }
+    } else {
+      redirect('./login');
     }
-    useEffect(() => {
-        if(accessToken) {
-            if(!(username && userId)) {
-                dispatch(fetchLichessAccountInfo(accessToken.value))
-            }
-        } else {
-            redirect('./login')
-        }
-    }, [accessToken, userId, username])
-            return (
-            <ApolloProvider client={apolloClient}>
-                {(userId && username) ? <HomeLoggedIn logout={doLogout}/>  : <div>Loading</div>}
-            </ApolloProvider>
-        )
+  }, [accessToken, userId, username]);
+  return (
+    <ApolloProvider client={apolloClient}>
+      {userId && username ? (
+        <HomeLoggedIn logout={doLogout} />
+      ) : (
+        <div>Loading</div>
+      )}
+    </ApolloProvider>
+  );
 }
 
-interface HomeLoggedInProps{
-    logout: EventHandler<MouseEvent<HTMLButtonElement>>
+interface HomeLoggedInProps {
+  logout: EventHandler<MouseEvent<HTMLButtonElement>>;
 }
 function HomeLoggedIn(props: HomeLoggedInProps) {
     const {username, userId: lichessUserId, puzzleRating} = useSelector(selectActiveUserLichessData)

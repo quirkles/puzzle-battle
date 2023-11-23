@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run generate-gql-types && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "graphql-gen": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "generate-gql-types": "graphql-codegen",
+    "generate-gql-types:watch": "graphql-codegen -w"
   },
   "dependencies": {
     "@apollo/client": "^3.8.7",
@@ -27,6 +28,9 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@storybook/addon-essentials": "^7.5.3",
     "@storybook/addon-interactions": "^7.5.3",
     "@storybook/addon-links": "^7.5.3",
@@ -47,6 +51,6 @@
     "postcss": "^8",
     "storybook": "^7.5.3",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5"
+    "typescript": "^5.3.2"
   }
 }
