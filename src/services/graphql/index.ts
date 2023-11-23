@@ -1,1 +1,1 @@
-export {apolloClient} from './GraphQlService'
+export { apolloClient } from './GraphQlService';

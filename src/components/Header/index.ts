@@ -1,1 +1,1 @@
-export {Header, Left, Right, Center} from './Header'
+export { Header, Left, Right, Center } from './Header';

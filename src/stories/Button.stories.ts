@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import {Button} from "../components";
-import '../app/globals.css'
-import {Colors} from "../colors";
+import { Button } from '../components';
+import '../app/globals.css';
+import { Colors } from '../colors';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
@@ -9,15 +9,15 @@ const meta = {
   component: Button,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
-    layout: 'centered',
+    layout: 'centered'
   },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/react/writing-docs/autodocs
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     text: { control: 'text' },
-    color: { control: 'select' },
-  },
+    color: { control: 'select' }
+  }
 } satisfies Meta<typeof Button>;
 
 export default meta;
@@ -28,5 +28,5 @@ export const Primary: Story = {
   args: {
     text: 'Primary Button',
     color: Colors.BLUE
-  },
+  }
 };
