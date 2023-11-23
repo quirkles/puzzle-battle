@@ -4,7 +4,7 @@ import {
   isServerEvent,
   ServerEventPayloadMap,
   serverEventSchemaMap,
-  ServerEventType,
+  ServerEventType
 } from './serverEventDefinitions';
 
 export class EventSocketService {
