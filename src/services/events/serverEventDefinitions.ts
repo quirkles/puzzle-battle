@@ -1,30 +1,30 @@
-import z, {ZodSchema} from "zod"
+import z, { ZodSchema } from 'zod';
 
-export type ServerEventType = 'GameStart'
+export type ServerEventType = 'GameStart';
 
 type BaseMap = {
-    [eventName in ServerEventType]: {
-        type: eventName
-    }
-}
+  [eventName in ServerEventType]: {
+    type: eventName;
+  };
+};
 
 const gameStartEventPayloadSchema = z.object({
-    gameId: z.string(),
-    type: z.literal('GameStart')
-})
+  gameId: z.string(),
+  type: z.literal('GameStart')
+});
 
-type GameStartEventPayload = z.infer<typeof gameStartEventPayloadSchema>
+type GameStartEventPayload = z.infer<typeof gameStartEventPayloadSchema>;
 
 export interface ServerEventPayloadMap extends BaseMap {
-    GameStart: GameStartEventPayload
+  GameStart: GameStartEventPayload;
 }
 
 export const serverEventSchemaMap: {
-    [eventName in ServerEventType]: ZodSchema<ServerEventPayloadMap[eventName]>
+  [eventName in ServerEventType]: ZodSchema<ServerEventPayloadMap[eventName]>;
 } = {
-    GameStart: gameStartEventPayloadSchema
-}
+  GameStart: gameStartEventPayloadSchema
+};
 
 export function isServerEvent(maybeEvent: string): maybeEvent is ServerEventType {
-    return maybeEvent in serverEventSchemaMap
+  return maybeEvent in serverEventSchemaMap;
 }

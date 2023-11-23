@@ -1,24 +1,25 @@
 const OClientEvents = {
-    UserLogin: 'UserLogin',
-    GameStart: 'GameStart',
-} as const
+  UserLogin: 'UserLogin',
+  GameStart: 'GameStart'
+} as const;
 
-export type ClientEventType = keyof typeof OClientEvents
-export type ClientEventTypes = typeof OClientEvents[ClientEventType];
+export type ClientEventType = keyof typeof OClientEvents;
+export type ClientEventTypes = (typeof OClientEvents)[ClientEventType];
 
 interface BaseClientEvent {
-    type: ClientEventType
+  type: ClientEventType;
 }
 
 interface UserLoginEvent extends BaseClientEvent {
-    userId: string;
-    type: 'UserLogin'
+  userId: string;
+  type: 'UserLogin';
 }
 
-export type ClientEvent = UserLoginEvent
+export type ClientEvent = UserLoginEvent;
 
 export function userLogin(userId: string): UserLoginEvent {
-    return {
-        userId, type: 'UserLogin'
-    }
+  return {
+    userId,
+    type: 'UserLogin'
+  };
 }

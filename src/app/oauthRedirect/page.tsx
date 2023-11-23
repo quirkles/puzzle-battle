@@ -34,6 +34,6 @@ export default function OauthRedirect() {
     } else {
       redirect('/login');
     }
-  }, [accessToken]);
+  }, [accessToken, code, dispatch, oauthService, push, setAccessToken, state]);
   return <div>Oauth redirect</div>;
 }
