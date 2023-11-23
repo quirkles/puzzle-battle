@@ -5,6 +5,7 @@ on:
       - main
 jobs:
   lint:
+    name: lint code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
