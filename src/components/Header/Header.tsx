@@ -19,21 +19,21 @@ export function Header(props: HeaderProps) {
 
 export function Left({children}: PropsWithChildren){
     return (
-        <div>
+        <div className="grow flew order-1 place-content-start">
             {children}
         </div>
     )
 }
 export function Center({children}: PropsWithChildren){
     return (
-        <div>
+        <div className="grow flex order-2 place-content-center">
             {children}
         </div>
     )
 }
 export function Right({children}: PropsWithChildren){
     return (
-        <div>
+        <div className="grow flex order-3 place-content-end">
             {children}
         </div>
     )

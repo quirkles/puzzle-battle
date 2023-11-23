@@ -66,6 +66,9 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
         }
     }, [username, lichessUserId, puzzleRating]);
     useEffect(() => {
+        console.log("DATA", data)
+    }, [data]);
+    useEffect(() => {
         if(userId) {
             eventSocketService.notifyLogin(userId)
             return eventSocketService.on(
