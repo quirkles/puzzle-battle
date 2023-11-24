@@ -69,6 +69,9 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
     }
   }, [username, lichessUserId, puzzleRating, loginUser]);
   useEffect(() => {
+    console.log('DATA', data);
+  }, [data]);
+  useEffect(() => {
     if (data?.loginUser.id) {
       dispatch(activeUserSlice.actions.setId(data?.loginUser.id));
       eventSocketService.notifyLogin(data?.loginUser.id);
