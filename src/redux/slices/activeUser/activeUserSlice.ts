@@ -1,4 +1,3 @@
-import { v4 } from 'uuid';
 /* Core */
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
@@ -6,7 +5,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { fetchLichessAccountInfo } from './thunks';
 
 const initialState: ActiveUserSlice = {
-  id: v4(),
+  id: null,
   lichess: {
     userId: null,
     username: null,
@@ -32,6 +31,9 @@ export const activeUserSlice = createSlice({
     setLichessAccessToken: (state, action: PayloadAction<string | null>) => {
       state.lichess.accessToken = action.payload;
     },
+    setId: (state, action: PayloadAction<string | null>) => {
+      state.id = action.payload;
+    },
     setLichessUsername: (state, action: PayloadAction<string>) => {
       state.lichess.username = action.payload;
     },
@@ -52,7 +54,7 @@ export const activeUserSlice = createSlice({
 
 /* Types */
 export interface ActiveUserSlice {
-  id: string;
+  id: string | null;
   lichess: {
     userId: string | null;
     username: string | null;
