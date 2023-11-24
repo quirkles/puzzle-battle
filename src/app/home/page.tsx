@@ -54,7 +54,7 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
   } = useSelector(selectActiveUserLichessData);
   const eventSocketService = useEvents();
   const userId = useSelector(selectActiveUserId);
-  const [loginUser] = useMutation(LOGIN_USER);
+  const [loginUser, { data }] = useMutation(LOGIN_USER);
   useEffect(() => {
     if (username && lichessUserId && puzzleRating) {
       loginUser({
@@ -68,6 +68,9 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
       });
     }
   }, [username, lichessUserId, puzzleRating, loginUser]);
+  useEffect(() => {
+    console.log('DATA', data);
+  }, [data]);
   useEffect(() => {
     if (userId) {
       eventSocketService.notifyLogin(userId);

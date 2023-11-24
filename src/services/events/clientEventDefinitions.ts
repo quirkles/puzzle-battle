@@ -1,23 +1,35 @@
-const OClientEvents = {
-  UserLogin: 'UserLogin',
-  GameStart: 'GameStart'
-} as const;
+import z, { ZodSchema } from 'zod';
 
-export type ClientEventType = keyof typeof OClientEvents;
-export type ClientEventTypes = (typeof OClientEvents)[ClientEventType];
+export type ClientEventType = 'UserLogin';
 
-interface BaseClientEvent {
-  type: ClientEventType;
+type BaseMap = {
+  [eventName in ClientEventType]: {
+    type: eventName;
+  };
+};
+
+const userLoginEventPayloadSchema = z.object({
+  userId: z.string(),
+  type: z.literal('UserLogin')
+});
+
+type UserLoginEventPayload = z.infer<typeof userLoginEventPayloadSchema>;
+
+export interface ServerEventPayloadMap extends BaseMap {
+  UserLogin: UserLoginEventPayload;
 }
 
-interface UserLoginEvent extends BaseClientEvent {
-  userId: string;
-  type: 'UserLogin';
+export const clientEventSchemaMap: {
+  [eventName in ClientEventType]: ZodSchema<ServerEventPayloadMap[eventName]>;
+} = {
+  UserLogin: userLoginEventPayloadSchema
+};
+
+export function isServerEvent(maybeEvent: string): maybeEvent is ClientEventType {
+  return maybeEvent in clientEventSchemaMap;
 }
 
-export type ClientEvent = UserLoginEvent;
-
-export function userLogin(userId: string): UserLoginEvent {
+export function userLogin(userId: string): UserLoginEventPayload {
   return {
     userId,
     type: 'UserLogin'
