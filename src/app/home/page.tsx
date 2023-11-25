@@ -17,6 +17,7 @@ import { useOauthService } from '../hooks';
 import { LOGIN_USER } from '../../services/graphql/mutations/loginUser';
 import { apolloClient } from '../../services/graphql';
 import { GameTypeSelect } from './GametypeSelect';
+import { merriweather } from '../fonts';
 
 export default function Home() {
   const { oauthService } = useOauthContext();
@@ -46,33 +47,33 @@ export default function Home() {
 const gameTypes = [
   {
     type: 'first-to-3',
-    title: 'First to 3 wins',
-    description: 'First to 3 wins'
+    title: 'First to 3',
+    description: 'First player to solve 3 puzzles wins'
   },
   {
     type: 'first-to-4',
-    title: 'First to 4 wins',
-    description: 'First to 4 wins'
+    title: 'First to 4',
+    description: 'First player to solve 4 puzzles wins'
   },
   {
     type: 'first-to-5',
-    title: 'First to 5 wins',
-    description: 'First to 5 wins'
+    title: 'First to 5',
+    description: 'First player to solve 4 puzzles wins'
   },
   {
     type: '1-min',
-    title: 'Play for one minute, most solves wins.',
-    description: 'Complete as many as you can in 1 minute'
+    title: '1 Minute',
+    description: 'Complete as many puzzles as you can in 1 minute'
   },
   {
     type: '2-mins',
-    title: 'Play for two minutes, most solves wins.',
-    description: 'Complete as many as you can in 2 minutes'
+    title: '2 Minutes',
+    description: 'Complete as many puzzles as you can in 2 minutes'
   },
   {
     type: '3-mins',
-    title: 'Play for three minutes, most solves wins.',
-    description: 'Complete as many as you can in 3 minutes'
+    title: '3 Minutes',
+    description: 'Complete as many puzzles as you can in 3 minutes'
   }
 ];
 
@@ -113,19 +114,24 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
       return eventSocketService.on('GameStart', (payload) => redirect(`./game/${payload.gameId}`));
     }
   }, [data, eventSocketService, dispatch]);
+  const onSelectGameType = (type: string) => console.log(`Selected game type: ${type}`);
   return (
     <>
       <Header>
-        <h5 className="font-serif text-lg">
+        <h5 className={`text-lg ${merriweather.className}`}>
           Hello&nbsp;
-          <a className="underline text-purple" href={`https://lichess.com/${lichessUserId}`}>
+          <a
+            className="underline text-purple"
+            href={`https://lichess.org/@/${lichessUserId}`}
+            target="_blank"
+          >
             {username}
           </a>
         </h5>
         <Button text="Logout" onClick={props.logout} color={'red'}></Button>
       </Header>
       <div className="px-12 py-4">
-        <GameTypeSelect gameTypes={gameTypes} />
+        <GameTypeSelect gameTypes={gameTypes} onSelectGameType={onSelectGameType} />
       </div>
     </>
   );

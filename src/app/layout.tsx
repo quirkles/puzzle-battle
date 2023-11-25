@@ -1,25 +1,11 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { Lato, Merriweather } from 'next/font/google';
 
 import { ReduxProviders } from '../redux';
 import { OAuthProvider, EventsProvider } from '../services';
 
 import './globals.css';
-
-const lato = Lato({
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  display: 'swap'
-});
-
-const merriweather = Merriweather({
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  display: 'swap'
-});
+import { lato } from './fonts';
 
 export const metadata: Metadata = {
   title: 'Puzzle Battle',
@@ -31,10 +17,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <EventsProvider>
       <OAuthProvider>
         <ReduxProviders>
-          <html lang="en" className={`${lato.className} ${merriweather.className}`}>
-            <body className="w-full h-full bg-gray-light">
-              <div className="">{children}</div>
-            </body>
+          <html lang="en" className={lato.className}>
+            <body className="w-full h-full bg-gray-light">{children}</body>
           </html>
         </ReduxProviders>
       </OAuthProvider>
