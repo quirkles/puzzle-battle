@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import {randomProperty} from "../../utils/getRandomKey";
+import { randomProperty } from '../../utils/getRandomKey';
 
 type GameType = {
   type: string;

@@ -112,7 +112,7 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
       eventSocketService.notifyLogin(data?.loginUser.id);
       return eventSocketService.on('GameStart', (payload) => redirect(`./game/${payload.gameId}`));
     }
-  }, [data, eventSocketService]);
+  }, [data, eventSocketService, dispatch]);
   return (
     <>
       <Header>
