@@ -1,7 +1,10 @@
 import { PropsWithChildren } from 'react';
+import { IconType } from 'react-icons';
+import { TbChessQueen, TbChessBishop, TbChessRook, TbChessKing } from 'react-icons/tb';
 import { randomKey } from '../../utils/object';
 import { Button } from '../../components';
 import { merriweather } from '../fonts';
+import {randomElement} from "../../utils/array";
 
 type GameType = {
   type: string;
@@ -32,7 +35,11 @@ export function GameType(
       </h5>
       <div className="p-12 text-center">
         <p className="mb-4">{props.game.description}</p>
-        <Button color={color} text="play" onClick={() => props.onSelectGameType(props.game.type)} />
+        <Button
+          color={color}
+          icon={randomElement(chessIcons)}
+          onClick={() => props.onSelectGameType(props.game.type)}
+        />
       </div>
     </div>
   );
@@ -50,3 +57,5 @@ const classNames = {
   purple:
     'w-full h-full bg-white border-b-purple text-purple shadow-md transform hover:scale-105 transition-transform duration-300 ease-in-out'
 };
+
+const chessIcons: IconType[] = [TbChessQueen, TbChessBishop, TbChessRook, TbChessKing];
