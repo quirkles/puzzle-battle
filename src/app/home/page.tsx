@@ -43,9 +43,43 @@ export default function Home() {
   );
 }
 
+const gameTypes = [
+  {
+    type: 'first-to-3',
+    title: 'First to 3 wins',
+    description: 'First to 3 wins'
+  },
+  {
+    type: 'first-to-4',
+    title: 'First to 4 wins',
+    description: 'First to 4 wins'
+  },
+  {
+    type: 'first-to-5',
+    title: 'First to 5 wins',
+    description: 'First to 5 wins'
+  },
+  {
+    type: '1-min',
+    title: 'Play for one minute, most solves wins.',
+    description: 'Complete as many as you can in 1 minute'
+  },
+  {
+    type: '2-mins',
+    title: 'Play for two minutes, most solves wins.',
+    description: 'Complete as many as you can in 2 minutes'
+  },
+  {
+    type: '3-mins',
+    title: 'Play for three minutes, most solves wins.',
+    description: 'Complete as many as you can in 3 minutes'
+  }
+];
+
 interface HomeLoggedInProps {
   logout: EventHandler<MouseEvent<HTMLButtonElement>>;
 }
+
 function HomeLoggedIn(props: HomeLoggedInProps) {
   const {
     username,
@@ -82,10 +116,17 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
   return (
     <>
       <Header>
-        <span>Hello {username}</span>
+        <h5 className="font-serif text-lg">
+          Hello&nbsp;
+          <a className="underline text-purple" href={`https://lichess.com/${lichessUserId}`}>
+            {username}
+          </a>
+        </h5>
         <Button text="Logout" onClick={props.logout} color={'red'}></Button>
       </Header>
-      <GameTypeSelect />
+      <div className="px-12 py-4">
+        <GameTypeSelect gameTypes={gameTypes} />
+      </div>
     </>
   );
 }
