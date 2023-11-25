@@ -1,10 +1,9 @@
 import { PropsWithChildren } from 'react';
 import { IconType } from 'react-icons';
 import { TbChessQueen, TbChessBishop, TbChessRook, TbChessKing } from 'react-icons/tb';
-import { randomKey } from '../../utils/object';
+import { randomKey, randomElement } from '../../utils';
 import { Button } from '../../components';
 import { merriweather } from '../fonts';
-import {randomElement} from "../../utils/array";
 
 type GameType = {
   type: string;
