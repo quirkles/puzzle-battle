@@ -1,9 +1,11 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
-import './globals.css';
-import { ReduxProviders } from '../redux/Provider';
+
+import { ReduxProviders } from '../redux';
 import { OAuthProvider, EventsProvider } from '../services';
+
+import './globals.css';
 
 const lato = Lato({
   weight: ['400', '700'],
@@ -23,7 +25,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <OAuthProvider>
         <ReduxProviders>
           <html lang="en" className={lato.className}>
-            <body>{children}</body>
+            <body>
+              <div className="h-full bg-gray-light">{children}</div>
+            </body>
           </html>
         </ReduxProviders>
       </OAuthProvider>

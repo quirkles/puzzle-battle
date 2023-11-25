@@ -16,6 +16,7 @@ import { Button, Header } from '../../components';
 import { useOauthService } from '../hooks';
 import { LOGIN_USER } from '../../services/graphql/mutations/loginUser';
 import { apolloClient } from '../../services/graphql';
+import { GameTypeSelect } from './GametypeSelect';
 
 export default function Home() {
   const { oauthService } = useOauthContext();
@@ -84,6 +85,7 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
         <span>Hello {username}</span>
         <Button text="Logout" onClick={props.logout} color={'red'}></Button>
       </Header>
+      <GameTypeSelect />
     </>
   );
 }
