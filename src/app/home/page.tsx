@@ -108,13 +108,13 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
     console.log('DATA', data);
   }, [data]);
   useEffect(() => {
-    if (data?.loginUser.id) {
+    if (data?.loginUser.id && data?.loginUser.lichessPuzzleRating) {
       dispatch(activeUserSlice.actions.setId(data?.loginUser.id));
-      eventSocketService.notifyLogin(data?.loginUser.id);
+      eventSocketService.notifyLogin(data?.loginUser.id, data?.loginUser.lichessPuzzleRating);
       return eventSocketService.on('GameStart', (payload) => redirect(`./game/${payload.gameId}`));
     }
   }, [data, eventSocketService, dispatch]);
-  const onSelectGameType = (type: string) => console.log(`Selected game type: ${type}`);
+  const onSelectGameType = (type: string) => eventSocketService.notifyUserJoinGameLobby(type);
   return (
     <>
       <Header>
