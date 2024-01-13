@@ -6,12 +6,10 @@ interface HeaderProps extends PropsWithChildren {}
 
 export function Header(props: HeaderProps) {
   return (
-    <header className="bg-white lg:py-8">
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <nav className="relative flex items-center justify-between h-16 bg-white lg:rounded-md lg:shadow-lg lg:h-24 lg:px-8 lg:py-6 gap-4">
-          {props.children}
-        </nav>
-      </div>
+    <header>
+      <nav className="relative bg-white flex items-center justify-between lg:rounded-md lg:shadow-lg h-16 lg:h-24 px-12 lg:py-6 gap-4">
+        {props.children}
+      </nav>
     </header>
   );
 }

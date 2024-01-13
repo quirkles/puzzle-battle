@@ -1,5 +1,6 @@
 export const Colors = {
   BLUE: 'blue',
+  BLACK: 'black',
   YELLOW: 'yellow',
   RED: 'red',
   PURPLE: 'purple',

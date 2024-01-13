@@ -1,5 +1,5 @@
 import { io, Socket } from 'socket.io-client';
-import { ClientEvent, userLogin } from './clientEventDefinitions';
+import { ClientEventPayload, userJoinGameLobby, userLogin } from './clientEventDefinitions';
 import {
   isServerEvent,
   ServerEventPayloadMap,
@@ -26,7 +26,7 @@ export class EventSocketService {
     this.socket.connect();
   }
 
-  private dispatch(event: ClientEvent): void {
+  private dispatch(event: ClientEventPayload): void {
     const { type, ...rest } = event;
     this.connect();
     this.socket?.emit(type, rest);
@@ -49,12 +49,16 @@ export class EventSocketService {
     if (this.socket) {
       return;
     }
-    this.socket = io(`http://localhost:3030/User:${userId}`);
+    this.socket = io(`http://localhost:3030/User:${userId}`).onAny(this.catchallHandler.bind(this));
   }
 
-  notifyLogin(userId: string) {
+  notifyLogin(userId: string, lichessPuzzleRating: number) {
     this.initSocket(userId);
-    this.dispatch(userLogin(userId));
+    this.dispatch(userLogin(userId, lichessPuzzleRating));
+  }
+
+  notifyUserJoinGameLobby(gameType: string) {
+    this.dispatch(userJoinGameLobby(gameType));
     this.socket?.onAny(this.catchallHandler.bind(this));
   }
 

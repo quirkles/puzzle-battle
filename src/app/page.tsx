@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { redirect } from 'next/navigation';
 import { useOauthContext } from '../services';
 
-export default function Home() {
+export default function Page() {
   const { oauthService } = useOauthContext();
   useEffect(() => {
     if (oauthService.isAuthorized()) {

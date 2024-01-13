@@ -1,16 +1,11 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { Lato } from 'next/font/google';
-import './globals.css';
-import { ReduxProviders } from '../redux/Provider';
+
+import { ReduxProviders } from '../redux';
 import { OAuthProvider, EventsProvider } from '../services';
 
-const lato = Lato({
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  display: 'swap'
-});
+import './globals.css';
+import { lato } from './fonts';
 
 export const metadata: Metadata = {
   title: 'Puzzle Battle',
@@ -23,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <OAuthProvider>
         <ReduxProviders>
           <html lang="en" className={lato.className}>
-            <body>{children}</body>
+            <body className="w-full h-full bg-gray-light">{children}</body>
           </html>
         </ReduxProviders>
       </OAuthProvider>
