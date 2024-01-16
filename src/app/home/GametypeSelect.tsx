@@ -1,4 +1,4 @@
-import { useApolloClient, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { IconType } from 'react-icons';
@@ -39,7 +39,7 @@ export function GameType(
       liveSummaryQueryResult?.liveSummary.find((g) => g.type === props.game.type)
         ?.activePlayerCount || 0
     );
-  }, [liveSummaryQueryResult]);
+  }, [liveSummaryQueryResult, props.game.type]);
   return (
     <div className={classNames[color]}>
       <h5 className={`text-center py-4 border-b-2 text-xl font-bold ${merriweather.className}`}>

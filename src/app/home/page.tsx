@@ -1,10 +1,10 @@
 'use client';
-import {EventHandler, MouseEvent, useEffect} from 'react';
-import {ApolloProvider, useMutation} from '@apollo/client';
+import { EventHandler, MouseEvent, useEffect } from 'react';
+import { ApolloProvider, useMutation } from '@apollo/client';
 
-import {redirect} from 'next/navigation';
+import { redirect } from 'next/navigation';
 
-import {useEvents, useOauthContext} from '../../services';
+import { useEvents, useOauthContext } from '../../services';
 import {
   activeUserSlice,
   fetchLichessAccountInfo,
@@ -12,13 +12,13 @@ import {
   useDispatch,
   useSelector
 } from '../../redux';
-import {Button, Header} from '../../components';
-import {useOauthService} from '../hooks';
-import {LOGIN_USER} from '../../services/graphql/mutations/loginUser';
-import {apolloClient} from '../../services/graphql';
-import {GameTypeSelect} from './GametypeSelect';
-import {merriweather} from '../fonts';
-import {GameTypeEnum} from "../../__generated__/graphql";
+import { Button, Header } from '../../components';
+import { useOauthService } from '../hooks';
+import { LOGIN_USER } from '../../services/graphql/mutations/loginUser';
+import { apolloClient } from '../../services/graphql';
+import { GameTypeSelect } from './GametypeSelect';
+import { merriweather } from '../fonts';
+import { GameTypeEnum } from '../../__generated__/graphql';
 
 export default function Home() {
   const { oauthService } = useOauthContext();
