@@ -1,10 +1,10 @@
 'use client';
-import { EventHandler, MouseEvent, useEffect } from 'react';
-import { ApolloProvider, useMutation } from '@apollo/client';
+import {EventHandler, MouseEvent, useEffect} from 'react';
+import {ApolloProvider, useMutation} from '@apollo/client';
 
-import { redirect } from 'next/navigation';
+import {redirect} from 'next/navigation';
 
-import { useEvents, useOauthContext } from '../../services';
+import {useEvents, useOauthContext} from '../../services';
 import {
   activeUserSlice,
   fetchLichessAccountInfo,
@@ -12,12 +12,13 @@ import {
   useDispatch,
   useSelector
 } from '../../redux';
-import { Button, Header } from '../../components';
-import { useOauthService } from '../hooks';
-import { LOGIN_USER } from '../../services/graphql/mutations/loginUser';
-import { apolloClient } from '../../services/graphql';
-import { GameTypeSelect } from './GametypeSelect';
-import { merriweather } from '../fonts';
+import {Button, Header} from '../../components';
+import {useOauthService} from '../hooks';
+import {LOGIN_USER} from '../../services/graphql/mutations/loginUser';
+import {apolloClient} from '../../services/graphql';
+import {GameTypeSelect} from './GametypeSelect';
+import {merriweather} from '../fonts';
+import {GameTypeEnum} from "../../__generated__/graphql";
 
 export default function Home() {
   const { oauthService } = useOauthContext();
@@ -46,32 +47,32 @@ export default function Home() {
 
 const gameTypes = [
   {
-    type: 'first-to-3',
+    type: GameTypeEnum.Wins_3,
     title: 'First to 3',
     description: 'First player to solve 3 puzzles wins'
   },
   {
-    type: 'first-to-4',
+    type: GameTypeEnum.Wins_4,
     title: 'First to 4',
     description: 'First player to solve 4 puzzles wins'
   },
   {
-    type: 'first-to-5',
+    type: GameTypeEnum.Wins_5,
     title: 'First to 5',
     description: 'First player to solve 4 puzzles wins'
   },
   {
-    type: '1-min',
+    type: GameTypeEnum.Time_1Min,
     title: '1 Minute',
     description: 'Complete as many puzzles as you can in 1 minute'
   },
   {
-    type: '2-mins',
+    type: GameTypeEnum.Time_2Mins,
     title: '2 Minutes',
     description: 'Complete as many puzzles as you can in 2 minutes'
   },
   {
-    type: '3-mins',
+    type: GameTypeEnum.Time_3Mins,
     title: '3 Minutes',
     description: 'Complete as many puzzles as you can in 3 minutes'
   }

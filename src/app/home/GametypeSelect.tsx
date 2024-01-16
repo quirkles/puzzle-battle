@@ -1,12 +1,17 @@
-import { PropsWithChildren } from 'react';
+import { useApolloClient, useQuery } from '@apollo/client';
+
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { IconType } from 'react-icons';
 import { TbChessQueen, TbChessBishop, TbChessRook, TbChessKing } from 'react-icons/tb';
 import { randomKey, randomElement } from '../../utils';
 import { Button } from '../../components';
 import { merriweather } from '../fonts';
 
+import { GameTypeEnum } from '../../__generated__/graphql';
+import { LIVE_SUMMARY } from '../../services/graphql/queries/getLiveSummary';
+
 type GameType = {
-  type: string;
+  type: GameTypeEnum;
   description: string;
   title: string;
 };
@@ -27,6 +32,14 @@ export function GameType(
   props: PropsWithChildren<{ game: GameType; onSelectGameType: (gameType: string) => void }>
 ) {
   const color = randomKey(classNames);
+  const { loading, data: liveSummaryQueryResult } = useQuery(LIVE_SUMMARY, { pollInterval: 1000 });
+  const [currentlyPlayingCount, setCurrentlyPlayingCount] = useState<number>(0);
+  useEffect(() => {
+    setCurrentlyPlayingCount(
+      liveSummaryQueryResult?.liveSummary.find((g) => g.type === props.game.type)
+        ?.activePlayerCount || 0
+    );
+  }, [liveSummaryQueryResult]);
   return (
     <div className={classNames[color]}>
       <h5 className={`text-center py-4 border-b-2 text-xl font-bold ${merriweather.className}`}>
@@ -34,6 +47,9 @@ export function GameType(
       </h5>
       <div className="p-12 text-center">
         <p className="mb-4">{props.game.description}</p>
+        <small className="mb-4 block">
+          {loading ? 'Fetching data...' : `${currentlyPlayingCount} active players`}
+        </small>
         <Button
           color={color}
           icon={randomElement(chessIcons)}
