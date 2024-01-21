@@ -10,6 +10,7 @@ export function EventsProvider({ children }: PropsWithChildren) {
   return <EventsContext.Provider value={eventSocketService}>{children}</EventsContext.Provider>;
 }
 
-export function useEvents() {
+export function useEvents(userId: string) {
+  eventSocketService.initSocket(userId);
   return useContext(EventsContext);
 }

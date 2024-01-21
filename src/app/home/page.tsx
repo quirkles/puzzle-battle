@@ -1,5 +1,5 @@
 'use client';
-import { EventHandler, MouseEvent, useEffect } from 'react';
+import { EventHandler, MouseEvent, useEffect, useState } from 'react';
 import { ApolloProvider, useMutation } from '@apollo/client';
 
 import { redirect } from 'next/navigation';
@@ -88,10 +88,12 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
     userId: lichessUserId,
     puzzleRating
   } = useSelector(selectActiveUserLichessData);
-  const eventSocketService = useEvents();
+  const eventSocketService = useEvents(lichessUserId as string);
   const dispatch = useDispatch();
 
   const [loginUser, { data }] = useMutation(LOGIN_USER);
+  const [lookingForGameType, setLookingForGameType] = useState<GameTypeEnum | null>(null);
+
   useEffect(() => {
     if (username && lichessUserId && puzzleRating) {
       loginUser({
@@ -106,16 +108,17 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
     }
   }, [username, lichessUserId, puzzleRating, loginUser]);
   useEffect(() => {
-    console.log('DATA', data);
-  }, [data]);
-  useEffect(() => {
     if (data?.loginUser.id && data?.loginUser.lichessPuzzleRating) {
       dispatch(activeUserSlice.actions.setId(data?.loginUser.id));
       eventSocketService.notifyLogin(data?.loginUser.id, data?.loginUser.lichessPuzzleRating);
       return eventSocketService.on('GameStart', (payload) => redirect(`./game/${payload.gameId}`));
     }
   }, [data, eventSocketService, dispatch]);
-  const onSelectGameType = (type: string) => eventSocketService.notifyUserJoinGameLobby(type);
+
+  const onSelectGameType = (type: GameTypeEnum) => {
+    eventSocketService.notifyUserJoinGameLobby(type);
+    setLookingForGameType(type);
+  };
   return (
     <>
       <Header>
@@ -132,7 +135,11 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
         <Button text="Logout" onClick={props.logout} color={'red'}></Button>
       </Header>
       <div className="px-12 py-4">
-        <GameTypeSelect gameTypes={gameTypes} onSelectGameType={onSelectGameType} />
+        <GameTypeSelect
+          gameTypes={gameTypes}
+          onSelectGameType={onSelectGameType}
+          lookingForGameType={lookingForGameType}
+        />
       </div>
     </>
   );
