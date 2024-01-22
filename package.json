@@ -8,7 +8,7 @@
     "start": "next start",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "generate-gql-types": "graphql-codegen",
+    "generate-gql-types": "rm -rf src/__generated__ && graphql-codegen",
     "generate-gql-types:watch": "graphql-codegen -w",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

@@ -7,6 +7,8 @@ import {
   ServerEventType
 } from './serverEventDefinitions';
 
+import { GameTypeEnum } from '../../__generated__/graphql';
+
 export class EventSocketService {
   private socket: Socket | null = null;
 
@@ -57,9 +59,8 @@ export class EventSocketService {
     this.dispatch(userLogin(userId, lichessPuzzleRating));
   }
 
-  notifyUserJoinGameLobby(gameType: string) {
+  notifyUserJoinGameLobby(gameType: GameTypeEnum | null) {
     this.dispatch(userJoinGameLobby(gameType));
-    this.socket?.onAny(this.catchallHandler.bind(this));
   }
 
   private catchallHandler(event: ServerEventType, payload: Record<string, unknown>) {

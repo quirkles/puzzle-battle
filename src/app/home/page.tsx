@@ -1,5 +1,5 @@
 'use client';
-import { EventHandler, MouseEvent, useEffect } from 'react';
+import { EventHandler, MouseEvent, useEffect, useState } from 'react';
 import { ApolloProvider, useMutation } from '@apollo/client';
 
 import { redirect } from 'next/navigation';
@@ -18,6 +18,7 @@ import { LOGIN_USER } from '../../services/graphql/mutations/loginUser';
 import { apolloClient } from '../../services/graphql';
 import { GameTypeSelect } from './GametypeSelect';
 import { merriweather } from '../fonts';
+import { GameTypeEnum } from '../../__generated__/graphql';
 
 export default function Home() {
   const { oauthService } = useOauthContext();
@@ -46,32 +47,32 @@ export default function Home() {
 
 const gameTypes = [
   {
-    type: 'first-to-3',
+    type: GameTypeEnum.Wins_3,
     title: 'First to 3',
     description: 'First player to solve 3 puzzles wins'
   },
   {
-    type: 'first-to-4',
+    type: GameTypeEnum.Wins_4,
     title: 'First to 4',
     description: 'First player to solve 4 puzzles wins'
   },
   {
-    type: 'first-to-5',
+    type: GameTypeEnum.Wins_5,
     title: 'First to 5',
     description: 'First player to solve 4 puzzles wins'
   },
   {
-    type: '1-min',
+    type: GameTypeEnum.Time_1Min,
     title: '1 Minute',
     description: 'Complete as many puzzles as you can in 1 minute'
   },
   {
-    type: '2-mins',
+    type: GameTypeEnum.Time_2Mins,
     title: '2 Minutes',
     description: 'Complete as many puzzles as you can in 2 minutes'
   },
   {
-    type: '3-mins',
+    type: GameTypeEnum.Time_3Mins,
     title: '3 Minutes',
     description: 'Complete as many puzzles as you can in 3 minutes'
   }
@@ -87,10 +88,12 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
     userId: lichessUserId,
     puzzleRating
   } = useSelector(selectActiveUserLichessData);
-  const eventSocketService = useEvents();
   const dispatch = useDispatch();
 
   const [loginUser, { data }] = useMutation(LOGIN_USER);
+  const [lookingForGameType, setLookingForGameType] = useState<GameTypeEnum | null>(null);
+
+  const eventSocketService = useEvents(data?.loginUser.id as string);
   useEffect(() => {
     if (username && lichessUserId && puzzleRating) {
       loginUser({
@@ -105,16 +108,17 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
     }
   }, [username, lichessUserId, puzzleRating, loginUser]);
   useEffect(() => {
-    console.log('DATA', data);
-  }, [data]);
-  useEffect(() => {
     if (data?.loginUser.id && data?.loginUser.lichessPuzzleRating) {
       dispatch(activeUserSlice.actions.setId(data?.loginUser.id));
       eventSocketService.notifyLogin(data?.loginUser.id, data?.loginUser.lichessPuzzleRating);
       return eventSocketService.on('GameStart', (payload) => redirect(`./game/${payload.gameId}`));
     }
   }, [data, eventSocketService, dispatch]);
-  const onSelectGameType = (type: string) => eventSocketService.notifyUserJoinGameLobby(type);
+
+  const onSelectGameType = (type: GameTypeEnum | null) => {
+    eventSocketService.notifyUserJoinGameLobby(type);
+    setLookingForGameType(type);
+  };
   return (
     <>
       <Header>
@@ -131,7 +135,11 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
         <Button text="Logout" onClick={props.logout} color={'red'}></Button>
       </Header>
       <div className="px-12 py-4">
-        <GameTypeSelect gameTypes={gameTypes} onSelectGameType={onSelectGameType} />
+        <GameTypeSelect
+          gameTypes={gameTypes}
+          onSelectGameType={onSelectGameType}
+          lookingForGameType={lookingForGameType}
+        />
       </div>
     </>
   );
