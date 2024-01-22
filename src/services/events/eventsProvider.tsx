@@ -11,6 +11,8 @@ export function EventsProvider({ children }: PropsWithChildren) {
 }
 
 export function useEvents(userId: string) {
-  eventSocketService.initSocket(userId);
+  if (userId) {
+    eventSocketService.initSocket(userId);
+  }
   return useContext(EventsContext);
 }

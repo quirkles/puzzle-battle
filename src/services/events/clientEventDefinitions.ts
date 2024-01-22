@@ -1,4 +1,5 @@
 import z, { ZodSchema } from 'zod';
+import { GameTypeEnum } from '../../__generated__/graphql';
 
 export type ClientEventType = 'UserLogin' | 'UserJoinGameLobby';
 
@@ -32,13 +33,13 @@ export function userLogin(userId: string, lichessPuzzleRating: number): UserLogi
 // UserJoinGameLobby
 
 const userJoinGameLobbyEventPayloadSchema = z.object({
-  gameType: z.string(),
+  gameType: z.enum([...Object.keys(GameTypeEnum)] as [string, ...string[]]).or(z.null()),
   type: z.literal('UserJoinGameLobby')
 });
 
 type UserJoinGameLobbyEventPayload = z.infer<typeof userJoinGameLobbyEventPayloadSchema>;
 
-export function userJoinGameLobby(gameType: string): UserJoinGameLobbyEventPayload {
+export function userJoinGameLobby(gameType: GameTypeEnum | null): UserJoinGameLobbyEventPayload {
   return {
     gameType,
     type: 'UserJoinGameLobby'

@@ -88,12 +88,12 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
     userId: lichessUserId,
     puzzleRating
   } = useSelector(selectActiveUserLichessData);
-  const eventSocketService = useEvents(lichessUserId as string);
   const dispatch = useDispatch();
 
   const [loginUser, { data }] = useMutation(LOGIN_USER);
   const [lookingForGameType, setLookingForGameType] = useState<GameTypeEnum | null>(null);
 
+  const eventSocketService = useEvents(data?.loginUser.id as string);
   useEffect(() => {
     if (username && lichessUserId && puzzleRating) {
       loginUser({
@@ -115,7 +115,7 @@ function HomeLoggedIn(props: HomeLoggedInProps) {
     }
   }, [data, eventSocketService, dispatch]);
 
-  const onSelectGameType = (type: GameTypeEnum) => {
+  const onSelectGameType = (type: GameTypeEnum | null) => {
     eventSocketService.notifyUserJoinGameLobby(type);
     setLookingForGameType(type);
   };
